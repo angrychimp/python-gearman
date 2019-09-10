@@ -148,7 +148,6 @@ class GearmanAdminClientCommandHandler(GearmanCommandHandler):
             self._workers_response = []
             return False
 
-        print(raw_text)
         split_tokens = raw_text.split()
         if len(split_tokens) < self.WORKERS_FIELDS:
             raise ProtocolError('Received %d tokens, expected >= 4 tokens: %r' % (len(split_tokens), split_tokens))
