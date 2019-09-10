@@ -127,7 +127,7 @@ class GearmanConnectionManager(object):
         current_connection.connect()
 
         # Initiate a new command handler every time we start a new connection
-        current_handler = getattr(self, self.command_handler_class)(connection_manager=self)
+        current_handler = self.command_handler_class(connection_manager=self)
 
         # Handler to connection map for CommandHandler -> Connection interactions
         # Connection to handler map for Connection -> CommandHandler interactions
