@@ -250,7 +250,7 @@ class GearmanConnection(object):
 
         while True:
             try:
-                bytes_sent = self.gearman_socket.send(self._outgoing_buffer)
+                bytes_sent = self.gearman_socket.send(self._outgoing_buffer.encode('utf-8'))
             except ssl.SSLError as e:
                 if e.errno == ssl.SSL_ERROR_WANT_READ:
                     continue

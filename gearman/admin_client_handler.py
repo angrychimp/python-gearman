@@ -97,7 +97,7 @@ class GearmanAdminClientCommandHandler(GearmanCommandHandler):
 
         cmd_callback = getattr(self, recv_server_command_function_name)
         if not cmd_callback:
-            gearman_logger.error('Could not handle command: %r - %r' % (cmd_type, raw_text))
+            gearman_logger.error('Could not handle command: %r - %r', cmd_type, raw_text)
             raise ValueError('Could not handle command: %r - %r' % (cmd_type, raw_text))
 
         # This must match the parameter names as defined in the command handler
@@ -106,6 +106,8 @@ class GearmanAdminClientCommandHandler(GearmanCommandHandler):
 
     def recv_server_status(self, raw_text):
         """Slowly assemble a server status message line by line"""
+        if isinstance(raw_text, bytes):
+            raw_text = raw_text.decode('utf-8')
         # If we received a '.', we've finished parsing this status message
         # Pack up our output and reset our response queue
         if raw_text == '.':
@@ -137,6 +139,7 @@ class GearmanAdminClientCommandHandler(GearmanCommandHandler):
 
     def recv_server_workers(self, raw_text):
         """Slowly assemble a server workers message line by line"""
+        raw_text = raw_text.decode('utf-8')
         # If we received a '.', we've finished parsing this workers message
         # Pack up our output and reset our response queue
         if raw_text == '.':
@@ -145,7 +148,8 @@ class GearmanAdminClientCommandHandler(GearmanCommandHandler):
             self._workers_response = []
             return False
 
-        split_tokens = raw_text.split(' ')
+        print(raw_text)
+        split_tokens = raw_text.split()
         if len(split_tokens) < self.WORKERS_FIELDS:
             raise ProtocolError('Received %d tokens, expected >= 4 tokens: %r' % (len(split_tokens), split_tokens))
 
